@@ -5,7 +5,7 @@ using namespace std;
 
 mutex mtx;
 condition_variable cv;
-bool flag = false;
+bool ready = false;
 
 
 void supplier_function()
@@ -15,7 +15,7 @@ void supplier_function()
 		this_thread::sleep_for(chrono::seconds(1));
 		{
 			unique_lock<mutex> ul(mtx);
-			flag = true;
+			ready = true;
 			cout << "Событие отправлено\n";
 			cv.notify_one();
 		}
@@ -27,10 +27,10 @@ void consumer_function()
 	while (true)
 	{
 		unique_lock<mutex> ul(mtx);
-		while (!flag) {
+		while (!ready) {
 			cv.wait(ul);
 		}
-		flag = false;
+		ready = false;
 		cout << "Событие обработано\n";
 	}
 }
@@ -44,6 +44,4 @@ int main()
 
 	supplier.join();
 	consumer.join();
-
-	return 0;
 }
