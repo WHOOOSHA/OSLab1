@@ -16,7 +16,7 @@ void supplier_function()
 		{
 			unique_lock<mutex> ul(mtx);
 			ready = true;
-			cout << "Событие отправлено\n";
+			cout << "provided\n";
 			cv.notify_one();
 		}
 	}
@@ -31,14 +31,13 @@ void consumer_function()
 			cv.wait(ul);
 		}
 		ready = false;
-		cout << "Событие обработано\n";
+		cout << "consumed\n";
 	}
 }
 
 
 int main()
 {
-	setlocale(LC_ALL, "ru");
 	thread supplier(supplier_function);
 	thread consumer(consumer_function);
 
