@@ -42,5 +42,4 @@ int main()
 	thread consumer(consumer_function);
 
 	supplier.join();
-	consumer.join();
 }
